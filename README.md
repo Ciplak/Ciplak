@@ -2,6 +2,7 @@
 
 1. **Selanik** – 100 daire: [`Selanik_100_Daire_Yatirim_Analizi_2026.xlsx`](Selanik_100_Daire_Yatirim_Analizi_2026.xlsx)
 2. **İstanbul Kadıköy** – lüks mahalleler, 2010 ve sonrası yapılmış 1+1/2+1, 102 daire: [`Kadikoy_Daire_Yatirim_Analizi_2026.xlsx`](Kadikoy_Daire_Yatirim_Analizi_2026.xlsx) (kod ve veri: `kadikoy/`)
+3. **İstanbul Kadıköy – çok portallı** – Emlakjet + Century 21 + Turyap, 106 tekil daire: [`Kadikoy_Coklu_Portal_Yatirim_Analizi_2026.xlsx`](Kadikoy_Coklu_Portal_Yatirim_Analizi_2026.xlsx). Sahibinden ve Hepsiemlak bot koruması nedeniyle dahil değil.
 
 ---
 

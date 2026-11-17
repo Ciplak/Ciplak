@@ -227,7 +227,7 @@ for idx, rec in enumerate(R):
     put(M, r, CI['upd'], datetime.date.fromisoformat(rec['updated']) if rec['updated'] else 'Bilinmiyor', fmt=DATE)
     put(M, r, CI['first'], datetime.date.fromisoformat(rec['created']) if rec['created'] else 'Bilinmiyor', fmt=DATE)
     put(M, r, CI['ver'], CHECK, fmt=DATE)
-    put(M, r, CI['status'], f'=IF(P_KONTROL-{ref("upd", r)}<=P_ILAN_GUN,"Yayında (17.11.2026 erişildi)","Yayında ama güncelleme eski – teyit")')
+    put(M, r, CI['status'], f'=IF(ISNUMBER({ref("upd", r)}),IF(P_KONTROL-{ref("upd", r)}<=P_ILAN_GUN,"Yayında (17.11.2026 erişildi)","Yayında ama güncelleme eski – teyit"),"Yayında (17.11.2026 erişildi; güncelleme tarihi yok)")')
     if rec['images']: link(M, r, CI['photo'], rec['images'][0], 'Fotoğraf ↗')
     else: put(M, r, CI['photo'], '-')
     put(M, r, CI['mah'], rec['mah']); put(M, r, CI['zone'], 'Öncelikli lüks')
@@ -388,7 +388,7 @@ mq = lambda k, r: f'{q("main")}{C[k]}{r}'
 FLAGS = [
  ('Tapu kat mülkiyeti değil (kat irtifakı / tapu kaydı yok / intifa / arsa tapulu)', 15, lambda r: f'=IF({mq("tapu", r)}="Kat Mülkiyeti",0,1)'),
  ('Kira emsali < 3', 12, lambda r: f'=IF({mq("ncomp", r)}<3,1,0)'),
- ('Eski ilan (güncelleme > eşik)', 10, lambda r: f'=IF(P_KONTROL-{mq("upd", r)}>P_ILAN_GUN,1,0)'),
+ ('Eski ilan / güncelleme tarihi yok', 10, lambda r: f'=IF(ISNUMBER({mq("upd", r)}),IF(P_KONTROL-{mq("upd", r)}>P_ILAN_GUN,1,0),1)'),
  ('Krediye uygun değil / bilinmiyor', 8, lambda r: f'=IF({mq("kredi", r)}="Krediye Uygun",0,1)'),
  ('Kiracılı (sözleşme şartları bilinmiyor)', 8, lambda r: f'=IF({mq("usage", r)}="Kiracı Oturuyor",1,0)'),
  ('Fiyat emsalin %15+ üstünde', 8, lambda r: f'=IF({mq("pratio", r)}>1.15,1,0)'),
