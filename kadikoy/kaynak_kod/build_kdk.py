@@ -81,6 +81,7 @@ PARAMS = [
  ('Satın alma', 'P_ESYA_UYGULA', 'Eşyasız daireler eşyalansın mı? (1=Evet, 0=Hayır)', 0, 'seçim', 'Kadıköy’de uzun dönem kiralık stokun büyük kısmı eşyasız; kira emsalleri de çoğunlukla eşyasız. Varsayılan Hayır.', NUM),
  ('Satın alma', 'P_ESYA', 'Eşya paketi maliyeti', 250000, '₺', 'Orta segment mobilya + beyaz eşya. Varsayım.', TL),
  ('Kira', 'P_NET_ORAN', 'Net m² bilinmiyorsa net/brüt oranı', 0.80, 'x', 'Kira hesabı net m² üzerinden yapılır (brüt/net oranı binadan binaya çok değişir).', '0.00'),
+ ('Kira', 'P_ZEMIN_IND', 'Zemin / bahçe / giriş katı kira indirimi', 0.10, '%', 'Emsaller farklı katlardan oluşur; zemin seviyesindeki daireler (güvenlik, ışık, gürültü) genellikle daha düşük kiralanır. Varsayım.', '0.0%'),
  ('Kira', 'P_ILAN_INDIRIM', 'İlan kirası → sözleşme kirası indirimi', 0.05, '%', 'Emsaller İSTENEN kiralardır; gerçekleşmiş sözleşme kirası değildir.', PCT1),
  ('Kira', 'P_KIRACI_AY', 'Kiracı bulma ücreti (ay kira, KDV dahil)', 1.2, 'ay', '1 aylık kira + %20 KDV (piyasa uygulaması).', '0.00'),
  ('Kira', 'P_SOZLESME', 'Ortalama kiracı kalış süresi', 3, 'yıl', 'Varsayım.', NUM),
@@ -270,7 +271,7 @@ for idx, rec in enumerate(R):
     put(M, r, CI['basem2'], f'={ref("compavg", r)}*(1-P_ILAN_INDIRIM)', fmt=TL2)
     LK = ref('rentnow', r)
     for k_, sc in (('rk', 'SK'), ('rb', 'SB'), ('ri', 'SI')):
-        put(M, r, CI[k_], f'=IF(ISNUMBER({LK}),{LK},ROUND({ref("basem2", r)}*{ref("rsqm", r)}*{sc}_KIRA,-2))', fmt=TL)
+        put(M, r, CI[k_], f'=IF(ISNUMBER({LK}),{LK},ROUND({ref("basem2", r)}*{ref("rsqm", r)}*{sc}_KIRA*(1-IF({ref("floorn", r)}<1,P_ZEMIN_IND,0)),-2))', fmt=TL)
     put(M, r, CI['ra'], f'=CHOOSE(P_SENARYO,{ref("rk", r)},{ref("rb", r)},{ref("ri", r)})', fmt=TL, fill=fillGr)
     put(M, r, CI['gross'], f'={ref("ra", r)}*12', fmt=TL); put(M, r, CI['vac'], '=SA_BOS', fmt='0.00')
     put(M, r, CI['coll'], f'={ref("ra", r)}*(12-{ref("vac", r)})', fmt=TL)
@@ -441,7 +442,7 @@ for idx in range(N):
     col = 4
     for bn, pf in blocks:
         L = [GL(col + i) for i in range(7)]
-        put(S, r, col, f"=IF(ISNUMBER({m('rentnow')}),{m('rentnow')},ROUND({m('basem2')}*{m('rsqm')}*{pf}_KIRA,-2))", fmt=TL)
+        put(S, r, col, f"=IF(ISNUMBER({m('rentnow')}),{m('rentnow')},ROUND({m('basem2')}*{m('rsqm')}*{pf}_KIRA*(1-IF({m('floorn')}<1,P_ZEMIN_IND,0)),-2))", fmt=TL)
         put(S, r, col + 1, f'={L[0]}{r}*(12-{pf}_BOS)', fmt=TL)
         put(S, r, col + 2, f"={L[0]}{r}*12*P_BAKIM*{pf}_MAS+{L[1]}{r}*P_YONETIM+{L[0]}{r}*P_KIRACI_AY/P_SOZLESME+{m('price')}*P_EV+{m('sqm')}*P_SIGORTA*{pf}_MAS+IF({m('fees')}=\"\",P_AIDAT_VARS,{m('fees')})*({pf}_BOS+(12-{pf}_BOS)*P_AIDAT_PAY)", fmt=TL)
         put(S, r, col + 3, '=' + taxf(f'{L[1]}{r}'), fmt=TL)
