@@ -1,4 +1,11 @@
-# Selanik – 100 Dairelik Gayrimenkul Yatırım Araştırması (2026)
+# Gayrimenkul Yatırım Araştırmaları (2026)
+
+1. **Selanik** – 100 daire: [`Selanik_100_Daire_Yatirim_Analizi_2026.xlsx`](Selanik_100_Daire_Yatirim_Analizi_2026.xlsx)
+2. **İstanbul Kadıköy** – lüks mahalleler, 2010 ve sonrası yapılmış 1+1/2+1, 102 daire: [`Kadikoy_Daire_Yatirim_Analizi_2026.xlsx`](Kadikoy_Daire_Yatirim_Analizi_2026.xlsx) (kod ve veri: `kadikoy/`)
+
+---
+
+## Selanik – 100 Dairelik Gayrimenkul Yatırım Araştırması
 
 **Ana teslimat:** [`Selanik_100_Daire_Yatirim_Analizi_2026.xlsx`](Selanik_100_Daire_Yatirim_Analizi_2026.xlsx)
 
@@ -42,3 +49,18 @@ Veri kontrol tarihi: **17.11.2026**
 `kaynak_kod/` klasörü veri çekme, seçim ve Excel oluşturma betiklerini içerir. `veri/` klasörü modelin girdi verisini içerir.
 
 > Bu çalışma yatırım, hukuk veya vergi tavsiyesi değildir. Satın almadan önce ilanın güncelliğini, fiyatını ve hukuki durumunu emlak ofisi, Yunan avukat ve mühendis aracılığıyla teyit edin.
+
+---
+
+## Kadıköy (İstanbul) – özet yöntem
+
+- **Mahalleler:** Caferağa (Moda), Kozyatağı, Caddebostan, Suadiye, Fenerbahçe, Feneryolu, Göztepe, Erenköy, Zühtüpaşa, Koşuyolu.
+- **Kriterler:** 1+1 ve 2+1 daire, bina yaşı 0–15 (2010 ve sonrası), kullanıma hazır. Yapım aşamasındaki ilanlar yedek listeye alındı.
+- **Kaynak:** emlakjet.com. Taranan 197 adet 1+1/2+1 ilan, mükerrerler ayıklanınca 148 tekil daireye indi. Kriterleri karşılayan **102** daire ana listede, 46 ilan yedek listede. sahibinden.com ve hepsiemlak.com bot koruması nedeniyle erişilemedi.
+- **Kira emsalleri:**
+  - Kaynak: Emlakjet'teki Kadıköy geneli kiralık 1+1/2+1 ilanları (119 tekil ilan).
+  - Seçim: ≤2,5 km, aynı oda tipi, ±%35 m², kira **net m²** üzerinden.
+- **Model:** TL bazlı.
+  - Enflasyon yolu, TBK 344 kira artış sınırı ve 2026 kira vergisi tarifesiyle istisna dahil.
+  - EUR/TRY kuru TCMB'nin 17.11.2026 kurundan alındı.
+  - 5 ve 10 yıllık IRR hem TL hem € olarak hesaplanıyor.
